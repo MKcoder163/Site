@@ -1,0 +1,15 @@
+import requests
+
+def verify_ticket(ticket_id):
+    url = 'http://your_server_ip/verify_ticket'  # Замените на IP-адрес вашего сервера
+    response = requests.post(url, json={"ticket_id": ticket_id})
+    if response.status_code == 200:
+        data = response.json()
+        print(data["message"])
+    else:
+        print("Ошибка при проверке билета")
+
+# Пример использования
+      ticket_id = input("Введите номер")  # ID билета для верификации
+      verify_ticket(ticket_id)
+      
