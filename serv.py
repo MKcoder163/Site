@@ -11,6 +11,7 @@ def register_ticket():
     data = request.json
     ticket_id = generate_ticket_id()
     data['ticket_id'] = ticket_id
+    data['status'] = 'valid'  # Начальный статус - действителен
     tickets.append(data)
     return jsonify({"message": "Ticket registered successfully", "ticket_id": ticket_id})
 
@@ -20,7 +21,11 @@ def verify_ticket():
     ticket_id = data.get('ticket_id')
     for ticket in tickets:
         if ticket.get('ticket_id') == ticket_id:
-            return jsonify({"message": "Ticket is valid"})
+            if ticket.get('status') == 'valid':
+                ticket['status'] = 'used'  # Устанавливаем статус "использован"
+                return jsonify({"message": "Ticket is valid"})
+            else:
+                return jsonify({"message": "Ticket has already been used"})
     return jsonify({"message": "Ticket is invalid"})
 
 def generate_ticket_id():
@@ -28,3 +33,4 @@ def generate_ticket_id():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
